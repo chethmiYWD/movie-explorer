@@ -41,10 +41,10 @@ const Login = () => {
                 />
 
                 {error && <Typography color="error">{error}</Typography>}
-                        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                        Login
-                        </Button>
-                    </form>
-                    </Box>
-                );
-                };
+                <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                    Login
+                </Button>
+            </form>
+        </Box>
+    );
+};
