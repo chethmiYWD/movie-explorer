@@ -9,3 +9,12 @@ const Login = () => {
     const [error, setError] = useState('');
     const { login } = useAuth();
     const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (login(username, password)) {
+          navigate('/');
+        } else {
+          setError('Invalid credentials');
+        }
+      };
