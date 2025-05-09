@@ -26,4 +26,8 @@ const MovieCard = ({ movie }) => {
         >
           Details
         </Button>
+        </CardContent>
+    </Card>
+  );
+};
 
