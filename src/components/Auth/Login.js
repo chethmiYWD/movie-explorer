@@ -30,3 +30,12 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
+
+            <TextField
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    margin="normal"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
