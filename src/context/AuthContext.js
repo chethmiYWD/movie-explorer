@@ -17,3 +17,8 @@ export const AuthProvider = ({ children }) => {
         }
         return false;
       };
+
+      const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+      };
