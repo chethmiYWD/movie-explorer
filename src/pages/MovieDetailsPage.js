@@ -15,7 +15,7 @@ function MovieDetailsPage() {
     fetchMovieDetails();
   }, [id]);
 
-  const fetchMovieDetails = async () => {
+  const fetchMovieDetails = useCallback(async () => {
     try {
       const response = await api.get(`/movie/${id}?append_to_response=credits,videos`);
       setMovie(response.data);
@@ -24,7 +24,7 @@ function MovieDetailsPage() {
       setError('Failed to fetch movie details');
       setLoading(false);
     }
-  };
+  }, [id]);
 
   if (loading) {
     return <CircularProgress />;
