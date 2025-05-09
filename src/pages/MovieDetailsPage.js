@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import { Container, Typography, CircularProgress, Button } from '@mui/material';
@@ -11,10 +11,6 @@ function MovieDetailsPage() {
   const [error, setError] = useState(null);
   const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
 
-  useEffect(() => {
-    fetchMovieDetails();
-  }, [fetchMovieDetails]);
-
   const fetchMovieDetails = useCallback(async () => {
     try {
       const response = await api.get(`/movie/${id}?append_to_response=credits,videos`);
@@ -25,6 +21,10 @@ function MovieDetailsPage() {
       setLoading(false);
     }
   }, [id]);
+
+  useEffect(() => {
+    fetchMovieDetails();
+  }, [fetchMovieDetails]);
 
   if (loading) {
     return <CircularProgress />;
