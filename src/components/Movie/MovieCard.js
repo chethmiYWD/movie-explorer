@@ -11,3 +11,16 @@ const MovieCard = ({ movie }) => {
           image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
         />
+        <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {movie.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {movie.release_date} | Rating: {movie.vote_average}
+        </Typography>
+        <Button
+          component={Link}
+          to={`/movie/${movie.id}`}
+          variant="contained"
+          sx={{ mt: 2 }}
+        ></Button>
