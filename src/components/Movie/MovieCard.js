@@ -23,4 +23,7 @@ const MovieCard = ({ movie }) => {
           to={`/movie/${movie.id}`}
           variant="contained"
           sx={{ mt: 2 }}
-        ></Button>
+        >
+          Details
+        </Button>
+
