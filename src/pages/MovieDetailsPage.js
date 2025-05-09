@@ -13,7 +13,7 @@ function MovieDetailsPage() {
 
   useEffect(() => {
     fetchMovieDetails();
-  }, [id]);
+  }, [fetchMovieDetails]);
 
   const fetchMovieDetails = useCallback(async () => {
     try {
