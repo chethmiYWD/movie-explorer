@@ -18,3 +18,15 @@ const Login = () => {
           setError('Invalid credentials');
         }
       };
+
+      return (
+        <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4, p: 3 }}>
+          <Typography variant="h4" gutterBottom>Login</Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Username"
+              fullWidth
+              margin="normal"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
