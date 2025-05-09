@@ -39,3 +39,12 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+
+                {error && <Typography color="error">{error}</Typography>}
+                        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                        Login
+                        </Button>
+                    </form>
+                    </Box>
+                );
+                };
