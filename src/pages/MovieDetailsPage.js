@@ -5,14 +5,17 @@ import { Container, Typography, CircularProgress, Button, Box, Chip } from '@mui
 import { FavoritesContext } from '../context/FavoritesContext';
 import './MovieDetailsPage.css';
 
+// Movie details page component showing comprehensive movie information
 function MovieDetailsPage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
+  // Hooks for routing and state management
+  const { id } = useParams(); // Get movie ID from URL
+  const navigate = useNavigate(); // For navigation
+  const [movie, setMovie] = useState(null); // Movie data state
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext); // Favorites context
 
+  // Fetch movie details with credits and videos
   const fetchMovieDetails = useCallback(async () => {
     try {
       const response = await api.get(`/movie/${id}?append_to_response=credits,videos`);
@@ -24,10 +27,12 @@ function MovieDetailsPage() {
     }
   }, [id]);
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchMovieDetails();
   }, [fetchMovieDetails]);
 
+  // Loading state UI
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -36,15 +41,19 @@ function MovieDetailsPage() {
     );
   }
 
+  // Error state UI
   if (error) {
     return <Typography color="error" className="error-message">{error}</Typography>;
   }
 
+  // Check if movie is in favorites
   const isFavorite = favorites.some(fav => fav.id === movie.id);
+  // Extract release year or show 'N/A'
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
 
   return (
     <Container maxWidth="lg" className="movie-details-container">
+      {/* Back button */}
       <Button 
         onClick={() => navigate(-1)}
         className="back-button"
@@ -53,7 +62,9 @@ function MovieDetailsPage() {
         Back
       </Button>
 
+      {/* Main content - responsive layout (column on mobile, row on desktop) */}
       <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={4} mt={2}>
+        {/* Movie poster section */}
         <Box flex={1} className="poster-container">
           <img 
             src={movie.poster_path 
@@ -64,17 +75,21 @@ function MovieDetailsPage() {
           />
         </Box>
         
+        {/* Movie details section */}
         <Box flex={2} className="details-container">
+          {/* Movie title with release year */}
           <Typography variant="h3" className="movie-title" gutterBottom>
             {movie.title} <span className="release-year">({releaseYear})</span>
           </Typography>
           
+          {/* Genre chips */}
           <Box display="flex" gap={1} mb={2}>
             {movie.genres?.map(genre => (
               <Chip key={genre.id} label={genre.name} className="genre-chip" />
             ))}
           </Box>
           
+          {/* Rating and runtime chips */}
           <Box className="rating-runtime">
             <Chip 
               label={`⭐ ${movie.vote_average.toFixed(1)}/10`} 
@@ -86,11 +101,13 @@ function MovieDetailsPage() {
             />
           </Box>
           
+          {/* Movie overview */}
           <Typography variant="h6" mt={3} mb={1}>Overview</Typography>
           <Typography variant="body1" className="movie-overview">
             {movie.overview || 'No overview available.'}
           </Typography>
           
+          {/* Favorite button - toggles based on current state */}
           <Button 
             className="favorite-button"
             onClick={() => isFavorite ? removeFavorite(movie.id) : addFavorite(movie)}
@@ -102,6 +119,7 @@ function MovieDetailsPage() {
         </Box>
       </Box>
 
+      {/* Cast section - only shown if cast exists */}
       {movie.credits?.cast?.length > 0 && (
         <Box mt={6} className="cast-section">
           <Typography variant="h4" className="section-heading">Cast</Typography>
@@ -129,6 +147,7 @@ function MovieDetailsPage() {
         </Box>
       )}
 
+      {/* Trailers section - only shown if YouTube trailers exist */}
       {movie.videos?.results?.filter(v => v.site === 'YouTube').length > 0 && (
         <Box mt={6} className="trailers-section">
           <Typography variant="h4" className="section-heading">Trailers</Typography>
