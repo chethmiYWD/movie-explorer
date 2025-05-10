@@ -5,9 +5,27 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Light theme by default */
+body {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+/* Dark theme override */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Ensure MUI components respect theme */
+.MuiPaper-root {
+  transition: background-color 0.3s ease;
+}
+
+/* Remove default App.css styles */
+.App {
+  min-height: 100vh;
 }

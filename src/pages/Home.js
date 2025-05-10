@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, Button } from '@mui/material';
 import SearchBar from '../components/SearchBar';
 import MovieCard from '../components/MovieCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import './Home.css';
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,7 +36,6 @@ function Home() {
       });
       setSearchResults(response.data.results);
       setHasMore(response.data.page < response.data.total_pages);
-      localStorage.setItem('lastSearch', query);
     } catch (err) {
       setError('Failed to perform search');
     }
@@ -59,10 +59,15 @@ function Home() {
   const title = searchQuery ? 'Search Results' : 'Trending Movies';
 
   return (
-    <div>
-      <SearchBar onSearch={performSearch} />
-      {error && <Typography color="error">{error}</Typography>}
-      <Typography variant="h5" style={{ margin: '20px 0' }}>{title}</Typography>
+    <div className="home-container">
+      <div className="search-container">
+        <SearchBar onSearch={performSearch} />
+      </div>
+      
+      {error && <Typography className="error-message">{error}</Typography>}
+      
+      <Typography variant="h5" className="section-title">{title}</Typography>
+      
       <InfiniteScroll
         dataLength={moviesToDisplay.length}
         next={loadMore}
@@ -74,7 +79,7 @@ function Home() {
           </p>
         }
       >
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           {moviesToDisplay.map((movie) => (
             <Grid item xs={12} sm={6} md={4} key={movie.id}>
               <MovieCard movie={movie} />
@@ -82,6 +87,14 @@ function Home() {
           ))}
         </Grid>
       </InfiniteScroll>
+
+      {hasMore && (
+        <div className="load-more-container">
+          <Button className="load-more-button" onClick={loadMore} variant="contained">
+            Load More
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

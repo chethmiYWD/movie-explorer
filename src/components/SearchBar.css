@@ -1,0 +1,31 @@
+.search-bar-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-input {
+  flex-grow: 1;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #6e8efb, #a777e3) !important;
+  color: white !important;
+  min-width: 120px !important;
+}
+
+.search-bar-container {
+  background-color: transparent;
+}
+
+.search-input .MuiOutlinedInput-root {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .search-input .MuiOutlinedInput-root {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.search-input .MuiOutlinedInput-input {
+  padding: 12px 14px;
+}
