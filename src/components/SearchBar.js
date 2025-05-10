@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button } from '@mui/material';
 import './SearchBar.css';
 
-function SearchBar({ onSearch }) {
-  const [query, setQuery] = useState('');
+function SearchBar({ onSearch, initialValue }) {
+  const [query, setQuery] = useState(initialValue || '');
+
+  // Sync with parent component's searchQuery
+  useEffect(() => {
+    setQuery(initialValue || '');
+  }, [initialValue]);
 
   const handleSearch = () => {
     onSearch(query);

@@ -22,6 +22,27 @@
   padding: 0 24px !important;
 }
 
+.filters-container {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+body.dark-mode .filters-container {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.apply-filters-button {
+  background: linear-gradient(135deg, #6e8efb, #a777e3) !important;
+  color: white !important;
+}
+
+.reset-filters-button {
+  border-color: #6e8efb !important;
+  color: #6e8efb !important;
+}
+
 .section-title {
   margin: 20px 0;
   color: #6e8efb;
@@ -55,4 +76,18 @@
   background: linear-gradient(135deg, #6e8efb, #a777e3) !important;
   color: white !important;
   padding: 10px 25px !important;
+}
+
+@media (max-width: 768px) {
+  .filters-container {
+    padding: 15px;
+  }
+  
+  .search-container {
+    flex-direction: column;
+  }
+  
+  .search-button {
+    width: 100%;
+  }
 }
