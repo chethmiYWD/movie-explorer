@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { Grid, Typography, Button, Box, FormControl, InputLabel, Select, MenuItem, Slider } from '@mui/material';
+import { Grid, Typography, Button, Box, FormControl, InputLabel, Select, MenuItem, Slider, CircularProgress } from '@mui/material';
 import SearchBar from '../components/SearchBar';
 import MovieCard from '../components/MovieCard';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import './Home.css';
 
 function Home() {
@@ -17,6 +16,7 @@ function Home() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [yearRange, setYearRange] = useState([1990, new Date().getFullYear()]);
   const [ratingRange, setRatingRange] = useState([0, 10]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchTrendingMovies();
@@ -25,10 +25,13 @@ function Home() {
 
   const fetchTrendingMovies = async () => {
     try {
+      setIsLoading(true);
       const response = await api.get('/trending/movie/day');
       setTrendingMovies(response.data.results);
+      setIsLoading(false);
     } catch (err) {
       setError('Failed to fetch trending movies');
+      setIsLoading(false);
     }
   };
 
@@ -41,14 +44,16 @@ function Home() {
     }
   };
 
-  const performSearch = async (query) => {
-    setSearchQuery(query);
-    setPage(1);
+  const performSearch = async (query, resetPage = true) => {
     try {
+      setIsLoading(true);
+      if (resetPage) {
+        setPage(1);
+      }
       const response = await api.get('/search/movie', {
         params: { 
           query, 
-          page: 1,
+          page: resetPage ? 1 : page,
           with_genres: selectedGenre,
           primary_release_date: {
             gte: `${yearRange[0]}-01-01`,
@@ -58,35 +63,22 @@ function Home() {
           'vote_average.lte': ratingRange[1]
         }
       });
-      setSearchResults(response.data.results);
+      if (resetPage) {
+        setSearchResults(response.data.results);
+      } else {
+        setSearchResults(prev => [...prev, ...response.data.results]);
+      }
       setHasMore(response.data.page < response.data.total_pages);
+      setIsLoading(false);
     } catch (err) {
       setError('Failed to perform search');
+      setIsLoading(false);
     }
   };
 
   const loadMore = async () => {
-    const nextPage = page + 1;
-    try {
-      const response = await api.get('/search/movie', {
-        params: { 
-          query: searchQuery, 
-          page: nextPage,
-          with_genres: selectedGenre,
-          primary_release_date: {
-            gte: `${yearRange[0]}-01-01`,
-            lte: `${yearRange[1]}-12-31`
-          },
-          'vote_average.gte': ratingRange[0],
-          'vote_average.lte': ratingRange[1]
-        }
-      });
-      setSearchResults([...searchResults, ...response.data.results]);
-      setPage(nextPage);
-      setHasMore(nextPage < response.data.total_pages);
-    } catch (err) {
-      setError('Failed to load more results');
-    }
+    setPage(prev => prev + 1);
+    await performSearch(searchQuery, false);
   };
 
   const handleGenreChange = (event) => {
@@ -121,9 +113,10 @@ function Home() {
     setSelectedGenre('');
     setYearRange([1990, new Date().getFullYear()]);
     setRatingRange([0, 10]);
-    setSearchQuery(''); // Reset search query
-    setSearchResults([]); // Clear search results
-    fetchTrendingMovies(); // Reload trending movies
+    setSearchQuery('');
+    setSearchResults([]);
+    setPage(1);
+    fetchTrendingMovies();
   };
 
   const moviesToDisplay = searchQuery || searchResults.length > 0 ? searchResults : trendingMovies;
@@ -184,6 +177,7 @@ function Home() {
             variant="contained" 
             onClick={applyFilters}
             className="apply-filters-button"
+            disabled={isLoading}
           >
             Apply Filters
           </Button>
@@ -191,6 +185,7 @@ function Home() {
             variant="outlined" 
             onClick={resetFilters}
             className="reset-filters-button"
+            disabled={isLoading}
           >
             Reset
           </Button>
@@ -201,32 +196,37 @@ function Home() {
       
       <Typography variant="h5" className="section-title">{title}</Typography>
       
-      <InfiniteScroll
-        dataLength={moviesToDisplay.length}
-        next={loadMore}
-        hasMore={searchQuery ? hasMore : false}
-        loader={<h4>Loading...</h4>}
-        endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>{searchQuery ? 'No more results' : 'End of trending movies'}</b>
-          </p>
-        }
-      >
-        <Grid container spacing={3}>
-          {moviesToDisplay.map((movie) => (
-            <Grid item xs={12} sm={6} md={4} key={movie.id}>
-              <MovieCard movie={movie} />
-            </Grid>
-          ))}
-        </Grid>
-      </InfiniteScroll>
+      <Grid container spacing={3}>
+        {moviesToDisplay.map((movie) => (
+          <Grid item xs={12} sm={6} md={4} key={movie.id}>
+            <MovieCard movie={movie} />
+          </Grid>
+        ))}
+      </Grid>
 
-      {hasMore && (
-        <div className="load-more-container">
-          <Button className="load-more-button" onClick={loadMore} variant="contained">
+      {isLoading && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {hasMore && !isLoading && (
+        <Box display="flex" justifyContent="center" my={4}>
+          <Button 
+            className="load-more-button" 
+            onClick={loadMore}
+            variant="contained"
+            size="large"
+          >
             Load More
           </Button>
-        </div>
+        </Box>
+      )}
+
+      {!hasMore && moviesToDisplay.length > 0 && (
+        <Typography variant="body1" align="center" mt={4}>
+          {searchQuery ? 'No more results' : 'End of trending movies'}
+        </Typography>
       )}
     </div>
   );
