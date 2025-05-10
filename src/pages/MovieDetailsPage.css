@@ -1,81 +1,179 @@
 .movie-details-container {
-  padding: 2rem 0;
+  padding: 2rem 1rem;
+  color: inherit;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #6e8efb, #a777e3) !important;
+  color: white !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  padding: 8px 24px !important;
+  margin-bottom: 1rem !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.poster-container {
+  display: flex;
+  justify-content: center;
 }
 
 .movie-poster {
   width: 100%;
   max-width: 400px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.movie-poster:hover {
+  transform: scale(1.02);
 }
 
 .movie-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
   color: inherit;
-  margin-bottom: 1rem;
+}
+
+.release-year {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.genre-chip {
+  margin-right: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  background-color: rgba(110, 142, 251, 0.2) !important;
+  color: inherit !important;
+}
+
+.rating-runtime {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.rating-chip, .runtime-chip {
+  font-weight: 600 !important;
 }
 
 .movie-overview {
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.movie-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
 }
 
 .section-heading {
-  margin: 2rem 0 1rem;
-  color: inherit;
-  border-bottom: 2px solid;
+  margin: 2rem 0 1.5rem;
   padding-bottom: 0.5rem;
+  border-bottom: 3px solid;
+  border-image: linear-gradient(135deg, #6e8efb, #a777e3) 1;
   display: inline-block;
 }
 
-.cast-list {
-  list-style: none;
-  padding: 0;
+.cast-grid, .trailers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-.cast-item {
-  padding: 0.5rem;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.05);
+.cast-card {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-body.dark-mode .cast-item {
-  background-color: rgba(255, 255, 255, 0.05);
+body.dark-mode .cast-card {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.trailer-link {
-  display: block;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  color: inherit;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+.cast-card:hover {
+  transform: translateY(-5px);
 }
 
-.trailer-link:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.actor-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
 }
 
-body.dark-mode .trailer-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.actor-info {
+  padding: 1rem;
+}
+
+.actor-name {
+  font-weight: 600;
+}
+
+.actor-character {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.trailer-card {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+body.dark-mode .trailer-card {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.trailer-card:hover {
+  transform: translateY(-5px);
+}
+
+.trailer-iframe {
+  width: 100%;
+  height: 180px;
+  border: none;
+}
+
+.trailer-title {
+  padding: 1rem;
+  font-weight: 500;
 }
 
 .favorite-button {
-  margin-top: 1rem;
+  background: linear-gradient(135deg, #6e8efb, #a777e3) !important;
+  color: white !important;
+  padding: 10px 24px !important;
+  font-weight: 600 !important;
+}
+
+.favorite-button.remove {
+  background: linear-gradient(135deg, #ff4d4f, #f5222d) !important;
 }
 
 .error-message {
   text-align: center;
   margin: 2rem 0;
   color: #f44336;
+}
+
+@media (max-width: 768px) {
+  .movie-title {
+    font-size: 2rem;
+  }
+  
+  .cast-grid, .trailers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .actor-image {
+    height: 200px;
+  }
+  
+  .trailer-iframe {
+    height: 150px;
+  }
 }
